@@ -548,6 +548,88 @@ vows.describe('source-map')
         assert.deepEqual(minified.sourceMap._mappings._array[2], mapping);
       }
     },
+    'input map as inlined data URI123': {
+      'topic': function () {
+        return new CleanCSS({ sourceMap: true }).minify('div > a {\n  color: red;\n}/*# sourceMappingURL=data:application/json;base64,' + new Buffer(inputMap).toString('base64') + ' */');
+      },
+      'has 3 mappings': function (minified) {
+        assert.lengthOf(minified.sourceMap._mappings._array, 3);
+      },
+      'has `div > a` mapping': function (minified) {
+        var mapping = {
+          generatedLine: 1,
+          generatedColumn: 0,
+          originalLine: 1,
+          originalColumn: 4,
+          source: 'styles.less',
+          name: null
+        };
+        assert.deepEqual(minified.sourceMap._mappings._array[0], mapping);
+      },
+      'has `color` mapping': function (minified) {
+        var mapping = {
+          generatedLine: 1,
+          generatedColumn: 6,
+          originalLine: 2,
+          originalColumn: 2,
+          source: 'styles.less',
+          name: null
+        };
+        assert.deepEqual(minified.sourceMap._mappings._array[1], mapping);
+      },
+      'has second `color` mapping': function (minified) {
+        var mapping = {
+          generatedLine: 1,
+          generatedColumn: 12,
+          originalLine: 2,
+          originalColumn: 2,
+          source: 'styles.less',
+          name: null
+        };
+        assert.deepEqual(minified.sourceMap._mappings._array[2], mapping);
+      }
+    },
+    'input map as inlined data URI with charset123': {
+      'topic': function () {
+        return new CleanCSS({ sourceMap: true }).minify('div > a {\n  color: red;\n}/*# sourceMappingURL=data:application/json;charset=utf8;base64,' + new Buffer(inputMap).toString('base64') + ' */');
+      },
+      'has 3 mappings': function (minified) {
+        assert.lengthOf(minified.sourceMap._mappings._array, 3);
+      },
+      'has `div > a` mapping': function (minified) {
+        var mapping = {
+          generatedLine: 1,
+          generatedColumn: 0,
+          originalLine: 1,
+          originalColumn: 4,
+          source: 'styles.less',
+          name: null
+        };
+        assert.deepEqual(minified.sourceMap._mappings._array[0], mapping);
+      },
+      'has `color` mapping': function (minified) {
+        var mapping = {
+          generatedLine: 1,
+          generatedColumn: 6,
+          originalLine: 2,
+          originalColumn: 2,
+          source: 'styles.less',
+          name: null
+        };
+        assert.deepEqual(minified.sourceMap._mappings._array[1], mapping);
+      },
+      'has second `color` mapping': function (minified) {
+        var mapping = {
+          generatedLine: 1,
+          generatedColumn: 12,
+          originalLine: 2,
+          originalColumn: 2,
+          source: 'styles.less',
+          name: null
+        };
+        assert.deepEqual(minified.sourceMap._mappings._array[2], mapping);
+      }
+    },
     'complex input map': {
       'topic': function () {
         return new CleanCSS({ sourceMap: true, root: path.dirname(inputMapPath) }).minify('@import url(import.css);');
